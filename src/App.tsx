@@ -23,24 +23,7 @@ const formSchema = z.object({
 });
 
 function App() {
-  // 1 Define form
-  const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
-    defaultValues: {
-      title: "",
-      body: "",
-    },
-  });
-
-  // 2 define submit function
-  const onSubmit = (values: z.infer<typeof formSchema>) => {
-    createPostMutation({
-      ...values,
-      userId: 999,
-    });
-    console.log(values);
-  };
-
+  // Query
   const {
     data: usersData,
     isLoading,
@@ -50,6 +33,7 @@ function App() {
     queryFn: getUsers,
   });
 
+  // Mutate
   const {
     mutate: createPostMutation,
     isSuccess,
@@ -57,6 +41,24 @@ function App() {
   } = useMutation({
     mutationFn: createPost,
   });
+
+  // Define form
+  const form = useForm<z.infer<typeof formSchema>>({
+    resolver: zodResolver(formSchema),
+    defaultValues: {
+      title: "",
+      body: "",
+    },
+  });
+
+  // Define submit function
+  const onSubmit = (values: z.infer<typeof formSchema>) => {
+    createPostMutation({
+      ...values,
+      userId: 999,
+    });
+    console.log(values);
+  };
 
   return (
     <div className="w-screen h-screen bg-gray-700 text-white flex justify-center items-center ">
